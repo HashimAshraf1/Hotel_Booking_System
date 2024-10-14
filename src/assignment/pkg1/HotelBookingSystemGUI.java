@@ -25,7 +25,7 @@ public class HotelBookingSystemGUI extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
 
         // Create a title label
-        JLabel titleLabel = new JLabel("Welcome To The Hotel Booking System", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("The Hotel Booking System", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(primaryTextColor); // Black text for contrast
         add(titleLabel, BorderLayout.NORTH);
