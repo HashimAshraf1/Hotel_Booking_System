@@ -84,5 +84,18 @@ public class HotelTest {
         // Ensure the booking is cancelled
         assertTrue(booking.isCancelled());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMakeBookingInvalidPayment() {
+    Customer customer = new Customer("Invalid Customer", "invalid@example.com");
+    LocalDate startDate = LocalDate.of(2024, 1, 1);
+    LocalDate endDate = LocalDate.of(2024, 1, 5);
+    
+    // Invalid payment with negative amount
+    Payment invalidPayment = new Payment(-100.0, PaymentMethod.CREDIT_CARD);
+
+    hotel.makeBooking(customer, "Single", startDate, endDate, invalidPayment);
+}
+    
 }
 
