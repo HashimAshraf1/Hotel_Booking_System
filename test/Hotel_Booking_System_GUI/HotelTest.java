@@ -9,8 +9,11 @@ import assignment.pkg1.Booking;
 import assignment.pkg1.Customer;
 import assignment.pkg1.Hotel;
 import assignment.pkg1.Payment;
-import assignment.pkg1.PaymentMethod;
+import assignment.pkg1.CreditCardPayment;
+import assignment.pkg1.SingleRoom;
+import assignment.pkg1.DoubleRoom;
 import assignment.pkg1.Room;
+import assignment.pkg1.SuiteRoom;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -24,20 +27,21 @@ public class HotelTest {
     @Before
     public void setUp() {
         hotel = new Hotel("Test Hotel");
-        hotel.addRoom(new Room(101, "Single"));
-        hotel.addRoom(new Room(102, "Double"));
+        hotel.addRoom(new SingleRoom(101));  // Corrected Room instantiation
+        hotel.addRoom(new DoubleRoom(102));  // Corrected Room instantiation
+        hotel.addRoom(new SuiteRoom(103));   // Corrected Room instantiation
     }
 
     @Test
     public void testAddRoom() {
         int initialRoomCount = hotel.getAvailableRooms().size();
-        hotel.addRoom(new Room(103, "Suite"));
+        hotel.addRoom(new SuiteRoom(104));  // Corrected Room instantiation
         assertEquals(initialRoomCount + 1, hotel.getAvailableRooms().size());
     }
 
     @Test
     public void testFindAvailableRoom() {
-        Room room = hotel.findAvailableRoom("Single");
+        Room room = hotel.findAvailableRoomByType("Single");
         assertNotNull(room);
         assertEquals(101, room.getRoomNumber());
     }
@@ -47,7 +51,7 @@ public class HotelTest {
         Customer customer = new Customer("John Doe", "john@example.com");
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 5);
-        Payment payment = new Payment(500.0, PaymentMethod.CREDIT_CARD);
+        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe");  // Corrected Payment instantiation
 
         hotel.makeBooking(customer, "Single", startDate, endDate, payment);
 
@@ -55,24 +59,31 @@ public class HotelTest {
     }
 
     @Test
-    public void testMakeBookingFail_NoRoomAvailable() {
-        Customer customer = new Customer("Jane Doe", "jane@example.com");
-        LocalDate startDate = LocalDate.of(2024, 1, 1);
-        LocalDate endDate = LocalDate.of(2024, 1, 5);
-        Payment payment = new Payment(500.0, PaymentMethod.CREDIT_CARD);
+public void testMakeBookingFail_NoRoomAvailable() {
+    Customer customer = new Customer("Jane Doe", "jane@example.com");
+    LocalDate startDate = LocalDate.of(2024, 1, 1);
+    LocalDate endDate = LocalDate.of(2024, 1, 5);
+    Payment payment = new CreditCardPayment(500.0, "987654321", "Jane Doe");
 
-        // No room of this type available
-        hotel.makeBooking(customer, "Suite", startDate, endDate, payment);
-
-        assertEquals(0, hotel.getBookings().size());
+    // Ensure that no Suite rooms are available
+    Room suiteRoom = hotel.findAvailableRoomByType("Suite");
+    if (suiteRoom != null) {
+        suiteRoom.setAvailable(false);  // Mark it as unavailable
     }
+
+    // Attempt to make a booking for a room type that is not available
+    hotel.makeBooking(customer, "Suite", startDate, endDate, payment);
+
+    // The booking list should still be empty
+    assertEquals(0, hotel.getBookings().size());
+}
 
     @Test
     public void testCancelBooking() {
         Customer customer = new Customer("John Doe", "john@example.com");
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 5);
-        Payment payment = new Payment(500.0, PaymentMethod.CREDIT_CARD);
+        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe");  // Corrected Payment instantiation
 
         hotel.makeBooking(customer, "Single", startDate, endDate, payment);
         Booking booking = hotel.getBookings().get(0);
@@ -86,16 +97,16 @@ public class HotelTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testMakeBookingInvalidPayment() {
+public void testMakeBookingInvalidPayment() {
     Customer customer = new Customer("Invalid Customer", "invalid@example.com");
     LocalDate startDate = LocalDate.of(2024, 1, 1);
     LocalDate endDate = LocalDate.of(2024, 1, 5);
-    
-    // Invalid payment with negative amount
-    Payment invalidPayment = new Payment(-100.0, PaymentMethod.CREDIT_CARD);
 
+    // Invalid payment with negative amount
+    Payment invalidPayment = new CreditCardPayment(-100.0, "invalid", "Invalid Customer");
+
+    // This should throw an IllegalArgumentException
     hotel.makeBooking(customer, "Single", startDate, endDate, invalidPayment);
 }
-    
-}
 
+}
