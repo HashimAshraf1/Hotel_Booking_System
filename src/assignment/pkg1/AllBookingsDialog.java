@@ -28,11 +28,11 @@ public class AllBookingsDialog extends JDialog {
                 JLabel bookingDetails = new JLabel("<html>" +
                         "<b>Booking ID:</b> " + booking.getBookingID() + "<br>" +
                         "<b>Customer:</b> " + booking.getCustomer().getName() + "<br>" +
-                        "<b>Room:</b> " + booking.getRoom().getRoomNumber() + " (" + booking.getRoom().getType() + ")<br>" +
+                        "<b>Room:</b> " + booking.getRoom().getRoomNumber() + " (" + booking.getRoom().getRoomType() + ")<br>" +
                         "<b>Start Date:</b> " + booking.getStartDate() + "<br>" +
                         "<b>End Date:</b> " + booking.getEndDate() + "<br>" +
                         "<b>Cancelled:</b> " + (booking.isCancelled() ? "Yes" : "No") + "<br>" +
-                        "<b>Payment:</b> " + booking.getPayment().getAmount() + " (" + booking.getPayment().getMethod() + ")<br>" +
+                        "<b>Payment:</b> " + booking.getPayment().getAmount() + " (" + booking.getPayment().getClass().getSimpleName() + ")<br>" +
                         "</html>");
 
                 bookingPanel.add(bookingDetails);
@@ -50,10 +50,12 @@ public class AllBookingsDialog extends JDialog {
         // Add OK button at the bottom
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> dispose());
-        add(okButton, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(okButton);
+        add(buttonPanel, BorderLayout.SOUTH);
         
         // Set dialog size and location
-        setSize(500, 400);  // Adjust size as per your need
+        setSize(500, 400);  // Adjust size as needed
         setLocationRelativeTo(parent);
     }
 }

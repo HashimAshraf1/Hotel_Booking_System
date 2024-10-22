@@ -7,19 +7,18 @@ package assignment.pkg1;
 /**
  *
  * @author kyoun
- */
-
+ */ 
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Hotel {
-    private final List<Room> rooms = new ArrayList<>(); // List of rooms in the hotel
-    private final List<Booking> bookings = new ArrayList<>(); // List of bookings
+    private final List<Room> rooms = new ArrayList<>();
+    private final List<Booking> bookings = new ArrayList<>();
 
-    // Constructor for Hotel, accepts the hotel name
     public Hotel(String name) {
+        // Constructor logic, if necessary
     }
 
     // Adds a new room to the hotel's room list
@@ -27,53 +26,14 @@ public class Hotel {
         rooms.add(room);
     }
 
-    // Finds an available room of certain type
-    public Room findAvailableRoom(String type) {
+    // Finds an available room of a certain type
+    public Room findAvailableRoomByType(String type) {
         for (Room room : rooms) {
-            if (room.getType().equalsIgnoreCase(type) && room.isAvailable()) {
+            if (room.getRoomType().equalsIgnoreCase(type) && room.isAvailable()) {
                 return room;
             }
         }
         return null; // Returns null if no available room is found
-    }
-
- // Creates a booking for a customer if an available room is found
-     public boolean makeBooking(Customer customer, String roomType, LocalDate startDate, LocalDate endDate, Payment payment) {
-        // Input validation
-        if (customer == null || roomType == null || startDate == null || endDate == null || payment == null) {
-            throw new IllegalArgumentException("Booking details cannot be null.");
-        }
-
-        if (payment.getAmount() < 0) {
-            throw new IllegalArgumentException("Payment amount cannot be negative.");
-        }
-
-        if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("End date cannot be before the start date.");
-        }
-
-        Room room = findAvailableRoom(roomType);
-        if (room != null) {
-            double nightlyRate = 100.0; // Default nightly rate
-            bookings.add(new Booking(customer, room, startDate, endDate, payment, nightlyRate));
-            System.out.println("Booking successful: " + bookings.get(bookings.size() - 1));
-            return true;
-        } else {
-            System.out.println("No available rooms of type " + roomType);
-            return false;
-        }
-    }
-
-    // Cancels a booking by its ID if it exists and is not already cancelled
-    public boolean cancelBooking(int bookingID) {
-        Booking booking = findBookingById(bookingID);
-        if (booking != null && !booking.isCancelled()) {
-            booking.cancelBooking();
-            return true; // Indicate that the booking was successfully cancelled
-        } else {
-            System.out.println("Booking not found or already cancelled.");
-            return false; // Indicate that the booking was not cancelled
-        }
     }
 
     // List of available rooms
@@ -87,17 +47,48 @@ public class Hotel {
         return availableRooms;
     }
 
-   // List of all non-cancelled bookings
-public List<Booking> getBookings() {
-    List<Booking> activeBookings = new ArrayList<>();
-    for (Booking booking : bookings) {
-        if (!booking.isCancelled()) {
-            activeBookings.add(booking);  // Only add non-cancelled bookings
-        }
+    // Method to create a booking
+public void makeBooking(Customer customer, String roomType, LocalDate startDate, LocalDate endDate, Payment payment) {
+    // invalid payments
+    if (payment.getAmount() <= 0) {
+        throw new IllegalArgumentException("Payment amount must be positive.");
     }
-    return activeBookings;
+
+    Room room = findAvailableRoomByType(roomType);
+    if (room != null) {
+        double nightlyRate = 100.0; // Example rate per night
+        Booking booking = new Booking(customer, room, startDate, endDate, nightlyRate, payment);
+        bookings.add(booking);
+        room.setAvailable(false); // Mark room as booked
+        System.out.println("Booking successful: " + booking);
+    } else {
+        System.out.println("No available rooms of type " + roomType);
+    }
 }
 
+
+    // Cancels a booking by its ID if it exists and is not already cancelled
+    public boolean cancelBooking(int bookingID) {
+        Booking booking = findBookingById(bookingID);
+        if (booking != null && !booking.isCancelled()) {
+            booking.cancelBooking();
+            return true;
+        } else {
+            System.out.println("Booking not found or already cancelled.");
+            return false;
+        }
+    }
+
+    // List of active bookings (non-cancelled bookings)
+    public List<Booking> getActiveBookings() {
+        List<Booking> activeBookings = new ArrayList<>();
+        for (Booking booking : bookings) {
+            if (!booking.isCancelled()) {
+                activeBookings.add(booking);
+            }
+        }
+        return activeBookings;
+    }
 
     // Finds a booking by its ID
     public Booking findBookingById(int bookingID) {
@@ -107,5 +98,13 @@ public List<Booking> getBookings() {
             }
         }
         return null; // Returns null if no booking with the given ID is found
+    }
+
+     // Method to return the bookings list
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+    public Room findAvailableRoom(String single) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -8,46 +8,31 @@ package assignment.pkg1;
  *
  * @author kyoun
  */
-public class Room {
-    // The room number (e.g., 101, 102)
+public abstract class Room {
     private final int roomNumber;
-    
-    // The type of room (e.g., Single, Double, Suite)
-    private final String type;
-    
-    // Indicates whether the room is currently available for booking
     private boolean isAvailable = true;
 
-    // Constructor to initialize the room number and type
-    public Room(int roomNumber, String type) {
+    public Room(int roomNumber) {
         this.roomNumber = roomNumber;
-        this.type = type;
     }
 
- 
-    public int getRoomNumber() { 
-        return roomNumber; 
+    public int getRoomNumber() {
+        return roomNumber;
     }
 
- 
-    public String getType() { 
-        return type; 
+    public boolean isAvailable() {
+        return isAvailable;
     }
 
-    // Checks if room is available for booking
-    public boolean isAvailable() { 
-        return isAvailable; 
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
-    // Sets the availability status of the room
-    public void setAvailable(boolean available) { 
-        isAvailable = available; 
-    }
+    // Abstract method to get the room type
+    public abstract String getRoomType();
 
-    // Overrides the toString method to provide a string representation of the room's details
     @Override
     public String toString() {
-        return String.format("Room Number: %d%nType: %s%nAvailable: %b", roomNumber, type, isAvailable);
+        return String.format("Room Number: %d, Type: %s, Available: %b", roomNumber, getRoomType(), isAvailable);
     }
 }
-

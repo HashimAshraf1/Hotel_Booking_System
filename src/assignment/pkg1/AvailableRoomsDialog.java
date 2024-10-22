@@ -16,19 +16,26 @@ public class AvailableRoomsDialog extends JDialog {
         JPanel roomPanel = new JPanel();
         roomPanel.setLayout(new BoxLayout(roomPanel, BoxLayout.Y_AXIS)); // Stack vertically
 
-        // Populate the room panel with room details
-        for (Room room : rooms) {
-            // Add room details in a better format using HTML for styling
-            JLabel roomLabel = new JLabel("<html><b>Room Number:</b> " + room.getRoomNumber() + "<br>" +
-                    "<b>Type:</b> " + room.getType() + "<br>" +
-                    "<b>Available:</b> " + (room.isAvailable() ? "Yes" : "No") + "</html>");
-            
-            // Add padding to the room label
-            roomLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            roomPanel.add(roomLabel);
+        if (rooms.isEmpty()) {
+            // Display a message if no rooms are available
+            JLabel noRoomsLabel = new JLabel("No available rooms.");
+            noRoomsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            roomPanel.add(noRoomsLabel);
+        } else {
+            // Populate the room panel with room details
+            for (Room room : rooms) {
+                // Add room details using HTML for better formatting
+                JLabel roomLabel = new JLabel("<html><b>Room Number:</b> " + room.getRoomNumber() + "<br>" +
+                        "<b>Type:</b> " + room.getRoomType() + "<br>" +
+                        "<b>Available:</b> " + (room.isAvailable() ? "Yes" : "No") + "</html>");
+                
+                // Add padding to the room label
+                roomLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                roomPanel.add(roomLabel);
 
-            // Add a separator line between rooms
-            roomPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+                // Add a separator line between rooms
+                roomPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+            }
         }
 
         // Make the panel scrollable in case of too many rooms
@@ -38,6 +45,8 @@ public class AvailableRoomsDialog extends JDialog {
         // Add a Close button at the bottom
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(e -> dispose());
-        add(closeButton, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(closeButton);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 }

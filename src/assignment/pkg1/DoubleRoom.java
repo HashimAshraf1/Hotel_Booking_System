@@ -9,9 +9,14 @@ package assignment.pkg1;
  * @author hash
  */
 
-public enum PaymentMethod {
-    CREDIT_CARD,
-    DEBIT_CARD,
-    PAYPAL,
-    CASH
+public class DoubleRoom extends Room {
+    public DoubleRoom(int roomNumber) {
+        super(roomNumber);
+    }
+
+    @Override
+    public String getRoomType() {
+        return "Double";
+    }
 }
+

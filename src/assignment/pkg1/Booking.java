@@ -4,12 +4,13 @@ package assignment.pkg1;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class Booking {
     private static int idCounter = 1; // Static counter for unique booking IDs
-    private final int bookingID = idCounter++; // Unique booking ID
+    private final int bookingID; // Unique booking ID
     private final Customer customer; // Customer associated with the booking
     private final Room room; // Room associated with the booking
     private LocalDate startDate, endDate; // Booking start and end dates
@@ -18,21 +19,20 @@ public class Booking {
     private final double nightlyRate; // Rate per night for the room
 
     // Constructor to initialize a booking with necessary details
-    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, Payment payment, double nightlyRate) {
+    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, double nightlyRate, Payment payment) {
+        this.bookingID = idCounter++;
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.payment = payment;
         this.nightlyRate = nightlyRate;
-        room.setAvailable(false); // Mark the room as unavailable when booked
+        this.payment = payment;
+        
+        // Mark the room as unavailable once a booking is created
+        this.room.setAvailable(false);
     }
 
-    Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, Payment payment) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    // Allow early check-in and update payment 
+    // Allow early check-in and update payment
     public boolean earlyCheckIn(LocalDate newStartDate) {
         if (newStartDate.isBefore(startDate)) {
             long extraDays = ChronoUnit.DAYS.between(newStartDate, startDate);
@@ -67,13 +67,9 @@ public class Booking {
         }
     }
 
-    // Get Method
+    // Getters
     public int getBookingID() {
         return bookingID;
-    }
-
-    public Customer getCustomer() {
-        return customer;
     }
 
     public Room getRoom() {
@@ -88,20 +84,21 @@ public class Booking {
         return endDate;
     }
 
-    public boolean isCancelled() {
-        return isCancelled;
-    }
-
     public Payment getPayment() {
         return payment;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
     }
 
     // Returns a string representation of the booking
     @Override
     public String toString() {
-        String paymentMethodString = payment.getMethod().name().replace("_", " ").toLowerCase();
-        paymentMethodString = Character.toUpperCase(paymentMethodString.charAt(0)) + paymentMethodString.substring(1);
-
         return String.format(
             "Booking Details:%n" +
             "----------------%n" +
@@ -114,10 +111,10 @@ public class Booking {
             "Payment: %.2f (%s)",
             bookingID,
             customer.getName(),
-            room.getRoomNumber(), room.getType(),
+            room.getRoomNumber(), room.getRoomType(),
             startDate, endDate,
             isCancelled,
-            payment.getAmount(), paymentMethodString
+            payment.getAmount(), payment.getClass().getSimpleName()
         );
     }
 }

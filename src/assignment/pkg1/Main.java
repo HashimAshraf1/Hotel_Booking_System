@@ -13,9 +13,9 @@ public class Main {
         Hotel hotel = new Hotel("Grand Hotel");
 
         // Adding sample rooms to the hotel
-        hotel.addRoom(new Room(101, "Single"));
-        hotel.addRoom(new Room(102, "Double"));
-        hotel.addRoom(new Room(103, "Suite"));
+        hotel.addRoom(new SingleRoom(101));
+        hotel.addRoom(new DoubleRoom(102));
+        hotel.addRoom(new SuiteRoom(103));
 
         // Create the controller and view
         HotelBookingController controller = new HotelBookingController(hotel, null);
@@ -26,5 +26,3 @@ public class Main {
         SwingUtilities.invokeLater(() -> view.setVisible(true));
     }
 }
-
-
