@@ -37,15 +37,30 @@ public class Hotel {
         return null; // Returns null if no available room is found
     }
 
-    // Creates a booking for a customer if an available room is found
-    public void makeBooking(Customer customer, String roomType, LocalDate startDate, LocalDate endDate, Payment payment) {
+ // Creates a booking for a customer if an available room is found
+     public boolean makeBooking(Customer customer, String roomType, LocalDate startDate, LocalDate endDate, Payment payment) {
+        // Input validation
+        if (customer == null || roomType == null || startDate == null || endDate == null || payment == null) {
+            throw new IllegalArgumentException("Booking details cannot be null.");
+        }
+
+        if (payment.getAmount() < 0) {
+            throw new IllegalArgumentException("Payment amount cannot be negative.");
+        }
+
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date cannot be before the start date.");
+        }
+
         Room room = findAvailableRoom(roomType);
         if (room != null) {
             double nightlyRate = 100.0; // Default nightly rate
             bookings.add(new Booking(customer, room, startDate, endDate, payment, nightlyRate));
             System.out.println("Booking successful: " + bookings.get(bookings.size() - 1));
+            return true;
         } else {
             System.out.println("No available rooms of type " + roomType);
+            return false;
         }
     }
 
