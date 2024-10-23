@@ -27,15 +27,14 @@ public class HotelTest {
     @Before
     public void setUp() {
         hotel = new Hotel("Test Hotel");
-        hotel.addRoom(new SingleRoom(101));  // Corrected Room instantiation
-        hotel.addRoom(new DoubleRoom(102));  // Corrected Room instantiation
-        hotel.addRoom(new SuiteRoom(103));   // Corrected Room instantiation
-    }
+        hotel.addRoom(new SingleRoom(101)); 
+        hotel.addRoom(new DoubleRoom(102));  
+        hotel.addRoom(new SuiteRoom(103));  
 
     @Test
     public void testAddRoom() {
         int initialRoomCount = hotel.getAvailableRooms().size();
-        hotel.addRoom(new SuiteRoom(104));  // Corrected Room instantiation
+        hotel.addRoom(new SuiteRoom(104));
         assertEquals(initialRoomCount + 1, hotel.getAvailableRooms().size());
     }
 
@@ -51,7 +50,7 @@ public class HotelTest {
         Customer customer = new Customer("John Doe", "john@example.com");
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 5);
-        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe");  // Corrected Payment instantiation
+        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe");  
 
         hotel.makeBooking(customer, "Single", startDate, endDate, payment);
 
@@ -68,7 +67,7 @@ public void testMakeBookingFail_NoRoomAvailable() {
     // Ensure that no Suite rooms are available
     Room suiteRoom = hotel.findAvailableRoomByType("Suite");
     if (suiteRoom != null) {
-        suiteRoom.setAvailable(false);  // Mark it as unavailable
+        suiteRoom.setAvailable(false);  
     }
 
     // Attempt to make a booking for a room type that is not available
@@ -83,7 +82,7 @@ public void testMakeBookingFail_NoRoomAvailable() {
         Customer customer = new Customer("John Doe", "john@example.com");
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 5);
-        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe");  // Corrected Payment instantiation
+        Payment payment = new CreditCardPayment(500.0, "123456789", "John Doe"); 
 
         hotel.makeBooking(customer, "Single", startDate, endDate, payment);
         Booking booking = hotel.getBookings().get(0);
