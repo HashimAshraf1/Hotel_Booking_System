@@ -9,14 +9,14 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class Booking {
-    private static int idCounter = 1; // Static counter for unique booking IDs
-    private final int bookingID; // Unique booking ID
-    private final Customer customer; // Customer associated with the booking
-    private final Room room; // Room associated with the booking
-    private LocalDate startDate, endDate; // Booking start and end dates
-    private boolean isCancelled = false; // Status to check if the booking is cancelled
-    private final Payment payment; // Payment details for the booking
-    private final double nightlyRate; // Rate per night for the room
+    private static int idCounter = 1; 
+    private final int bookingID; 
+    private final Customer customer; 
+    private final Room room; 
+    private LocalDate startDate, endDate; 
+    private boolean isCancelled = false; 
+    private final Payment payment;
+    private final double nightlyRate; 
 
     // Constructor to initialize a booking with necessary details
     public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, double nightlyRate, Payment payment) {
@@ -59,7 +59,7 @@ public class Booking {
     // Cancel the booking and mark room as available
     public void cancelBooking() {
         if (!isCancelled) {
-            room.setAvailable(true); // Room is available again
+            room.setAvailable(true);
             isCancelled = true;
             System.out.println("Room is available again.");
         } else {
@@ -99,22 +99,24 @@ public class Booking {
     // Returns a string representation of the booking
     @Override
     public String toString() {
-        return String.format(
-            "Booking Details:%n" +
-            "----------------%n" +
-            "Booking ID: %d%n" +
-            "Customer: %s%n" +
-            "Room: %d (%s)%n" +
-            "Start Date: %s%n" +
-            "End Date: %s%n" +
-            "Cancelled: %b%n" +
-            "Payment: %.2f (%s)",
-            bookingID,
-            customer.getName(),
-            room.getRoomNumber(), room.getRoomType(),
-            startDate, endDate,
-            isCancelled,
-            payment.getAmount(), payment.getClass().getSimpleName()
-        );
-    }
+    return String.format(
+        "Booking Details:%n" +
+        "----------------%n" +
+        "Booking ID: %d%n" +
+        "Customer: %s%n" +
+        "Contact Info: %s%n" +  
+        "Room: %d (%s)%n" +
+        "Start Date: %s%n" +
+        "End Date: %s%n" +
+        "Cancelled: %b%n" +
+        "Payment: %.2f (%s)",
+        bookingID,
+        customer.getName(),
+        customer.getContactInfo(), 
+        room.getRoomNumber(), room.getRoomType(),
+        startDate, endDate,
+        isCancelled,
+        payment.getAmount(), payment.getClass().getSimpleName()
+    );
+}
 }
